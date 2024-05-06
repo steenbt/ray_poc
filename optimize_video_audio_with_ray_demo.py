@@ -35,7 +35,7 @@
 # MAGIC %pip install imageio[ffmpeg]
 # MAGIC %pip install pyacoustid
 # MAGIC %pip install pydub
-# MAGIC %pip install ray[default,tune,client]==2.10.0
+# MAGIC %pip install ray[default,client]==2.20.0
 # MAGIC %pip install retry
 # MAGIC %pip install scipy
 # MAGIC
@@ -433,12 +433,12 @@ def parse_creatives(urls: pd.Series) -> pd.Series:
     import ray
     import ray.data
 
-    ray.init(ray_conf[1])
 
 
     @ray.remote
     def ray_data_task(ds = None):
         ds = ray.data.from_pandas(pd.DataFrame(urls.to_list(),columns = ['combo']))
+	ray.init(ray_conf[1])
 
         print("shape:",urls.shape[0])
         preds = (
